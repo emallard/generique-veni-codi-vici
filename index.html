@@ -1,0 +1,198 @@
+
+<html>
+<body>
+    <style>
+    @font-face {
+        font-family: 'blackout_sunrise';
+        src: url('blackout_sunrise-webfont.woff');
+    }
+    @font-face {
+        font-family: 'blackout_two_am';
+        src: url('blackout_two_am-webfont.woff');
+    }
+
+    ol 
+    {
+        font-family:'blackout_sunrise';
+        font-size:  130px;
+        color:#cccccc;
+    }
+
+    li:nth-child(2)
+    {
+        margin-left: 11px;
+    }
+    li:nth-child(3)
+    {
+        margin-left: 23px;
+    }
+
+    .victoire {
+        font-family:'blackout_two_am';
+        margin-top: -92px;
+        color:#d03434;
+        color1:#cbcd00;
+    }
+
+    .victoire:after{
+        content:'\00A0'
+    }
+
+     
+    .texte {
+        width:100%;
+        text-align:center;
+        font-family: Courier New, Courier, monospace;
+        font-size:20px;
+    }
+
+    #textePrecedent {
+        color:#cccccc;
+        opacity: 0.5;
+    }
+    #texte {
+
+        color:#d7ba7d;
+    }
+
+    #ecran {
+        /*background : #252526*/
+        background-image: url('back.jpg');
+        margin-top:20px;
+        padding-top:100px;
+        margin-left:20px;
+        width:1280px;
+        height:720px;
+        max-height:720px;
+    }
+
+    #marche-a-suivre {
+        margin-top:0px;
+        padding-top:0px;
+        width:100%;
+        margin-left:530px;
+        height:350px;
+    }
+
+    </style>
+
+    <div id='ecran'>
+        <ol id='marche-a-suivre'>
+        </ol>
+
+        <div id='textePrecedent' class='texte'>
+            
+        </div>
+        <div id='texte' class='texte'>
+            
+        </div>
+        
+    </div>
+
+    
+
+
+    <script>
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.split(search).join(replacement);
+        };
+
+        function boucleAfficher(texte, longueur, next)
+        {
+            document.getElementById('texte').innerHTML = texte.substring(0, longueur).replaceAll('<', '&lt;').replaceAll('>', '&gt;') ;
+            if (longueur < texte.length)
+                setTimeout(
+                    function() { boucleAfficher(texte, longueur+1, next) }, 
+                    10);
+            else
+                next();
+        }
+
+
+        function ol()
+        {
+            return document.getElementById('marche-a-suivre');
+        }
+        function f1(next)
+        {
+            ol().innerHTML = '<li>Veni</li>';
+            next();
+        }
+        function f2(next)
+        {
+            ol().style.listStyleType = 'upper-roman';
+            next();
+        }
+        function f3(next)
+        {
+            ol().innerHTML += '<li>Codi</li>';
+            next();
+        }
+        function f4(next)
+        {
+            ol().innerHTML += '<li>Vici</li>';
+            next();
+        }
+        function f5(next)
+        {
+            ol().lastChild.className = 'victoire';
+            next();
+        }
+
+        function sleep(pause)
+        {
+            return function(next) { setTimeout(next, pause) };
+        }
+        var texte1  = "var ol = document.getElementById('marche-a-suivre');"
+        var texte2  = "ol.style.listStyleType = 'upper-roman';"
+        var texte11 = "ol.innerHTML += '<li> VENI </li>';";
+        var texte3  = "ol.innerHTML += '<li> CODI </li>';";
+        var texte4  = "ol.innerHTML += '<li> VICI </li>';";
+        var texte5  = "ol.lastChild.className = 'commit-push'";
+        function afficherTexte(texte, pause)
+        {
+            return function(next) {
+                document.getElementById('textePrecedent').innerHTML += document.getElementById('texte').innerHTML + '<br>';
+            
+                boucleAfficher(texte, 0, next);
+            }
+        }
+
+
+        window.onload = function()
+        {
+            var pause = 800;
+            var all = [
+                afficherTexte(texte1),
+                afficherTexte(texte2),
+                f2,
+                sleep(pause),
+                afficherTexte(texte11),
+                f1,
+                sleep(pause),
+                afficherTexte(texte3),
+                f3,
+                sleep(pause),
+                afficherTexte(texte4),
+                f4,
+                sleep(pause),
+                afficherTexte(texte5),
+                f5
+            ]
+            var i = 0;
+            function nextAll()
+            {
+                if (i >= all.length)
+                    return;
+                all[i++](nextAll);
+            }
+            nextAll();
+        }
+
+    </script>
+
+
+
+</body>
+</html>

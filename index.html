@@ -86,7 +86,6 @@
         <div id='texte' class='texte'>
             
         </div>
-        
     </div>
 
     
@@ -162,21 +161,40 @@
 
         window.onload = function()
         {
+            function play_phrase(next)
+            {
+                var audio = new Audio('2777.mp3');
+                audio.play();
+                next();
+            }
+
+            function play_mot(next)
+            {
+                var audio = new Audio('2776.mp3');
+                audio.play();
+                next();
+            }
+
             var pause = 800;
             var all = [
+                play_phrase,
                 afficherTexte(texte1),
                 afficherTexte(texte2),
                 f2,
                 sleep(pause),
+                //play_mot,
                 afficherTexte(texte11),
                 f1,
                 sleep(pause),
+                //play_mot,
                 afficherTexte(texte3),
                 f3,
                 sleep(pause),
+                //play_mot,
                 afficherTexte(texte4),
                 f4,
                 sleep(pause),
+                play_mot,
                 afficherTexte(texte5),
                 f5
             ]
@@ -188,6 +206,8 @@
                 all[i++](nextAll);
             }
             nextAll();
+
+           
         }
 
     </script>
